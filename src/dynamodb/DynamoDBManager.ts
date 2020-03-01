@@ -58,7 +58,7 @@ export class DynamoDBManager {
 
       keyConditions[this.config.hashKeyAttributeName] = {
         ComparisonOperator: "EQ",
-        AttributeValueList: [{ N: hashKey.toString(10) }]
+        AttributeValueList: [{ S: hashKey.toString(10) }]
       };
 
       const minRange: DynamoDB.AttributeValue = { N: range.rangeMin.toString(10) };
@@ -97,7 +97,7 @@ export class DynamoDBManager {
     getItemInput.TableName = this.config.tableName;
 
     getItemInput.Key = {
-      [this.config.hashKeyAttributeName]: { N: hashKey.toString(10) },
+      [this.config.hashKeyAttributeName]: { S: hashKey.toString(10) },
       [this.config.rangeKeyAttributeName]: getPointInput.RangeKeyValue
     };
 
@@ -141,7 +141,7 @@ export class DynamoDBManager {
         Item: putItemInput.Item || {}
       };
 
-      putRequest.Item[this.config.hashKeyAttributeName] = { N: hashKey.toString(10) };
+      putRequest.Item[this.config.hashKeyAttributeName] = { S: hashKey.toString(10) };
       putRequest.Item[this.config.rangeKeyAttributeName] = putPointInput.RangeKeyValue;
       putRequest.Item[this.config.geohashAttributeName] = { N: geohash.toString(10) };
       putRequest.Item[this.config.geoJsonAttributeName] = {
@@ -173,7 +173,7 @@ export class DynamoDBManager {
       updatePointInput.UpdateItemInput.Key = {};
     }
 
-    updatePointInput.UpdateItemInput.Key[this.config.hashKeyAttributeName] = { N: hashKey.toString(10) };
+    updatePointInput.UpdateItemInput.Key[this.config.hashKeyAttributeName] = { S: hashKey.toString(10) };
     updatePointInput.UpdateItemInput.Key[this.config.rangeKeyAttributeName] = updatePointInput.RangeKeyValue;
 
     // Geohash and geoJson cannot be updated.
@@ -193,7 +193,7 @@ export class DynamoDBManager {
       ...deletePointInput.DeleteItemInput,
       TableName: this.config.tableName,
       Key: {
-        [this.config.hashKeyAttributeName]: { N: hashKey.toString(10) },
+        [this.config.hashKeyAttributeName]: { S: hashKey.toString(10) },
         [this.config.rangeKeyAttributeName]: deletePointInput.RangeKeyValue
       }
     });
